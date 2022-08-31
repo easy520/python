@@ -1,0 +1,24 @@
+import re
+import os
+import requests
+image='表情包'
+if not os.path.exists(image):
+  os.mkdir(image)
+headers={
+  'User-Agent':'www.'
+  }
+response=requests.get('www',headers=headers)  
+response.encoding='gbk'
+response.encoding='utf-8'
+print(response.request.headers)
+print(response.status_code)
+t='<img src="(.*?)" alt="(.*?)" wdith="160" height="120">'
+result=re.findall(t,response.text)
+for img in result:
+  print(img)
+  res=requests.get(img[0],headers=headers)
+  print(res.status_code)
+  s=img[0].split('.')[-1]
+  with open('image + "/"+ img[1] +"."+s,mode="wb"') as file:
+    file.write(res.content)
+    #这就是我近日拿来练习的代码了，其目的是爬取一个图片网址，并且从中下载所有土图片，然后存入project中并且命名为 ‘表情包’
